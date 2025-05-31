@@ -9,6 +9,10 @@ namespace PatientRecoverySystemProject.Data
             : base(options) { }
 
         public DbSet<Patient> Patients { get; set; }
-        // Keyinroq: Symptoms, Diagnosis, MonitoringData, etc.
+        public DbSet<Symptom> Symptoms { get; set; }
+        public DbSet<Diagnosis> Diagnoses { get; set; }
+        public DbSet<MonitoringData> MonitoringData { get; set; }
+        public DbSet<RehabilitationData> RehabilitationData { get; set; }
+
     }
 }

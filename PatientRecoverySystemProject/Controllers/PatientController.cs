@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PatientRecoverySystemProject.Data;
 using PatientRecoverySystemProject.Models;
 
-namespace PatientRecoverySystem.Controllers
+namespace PatientRecoverySystemProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
