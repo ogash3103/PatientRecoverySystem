@@ -1,0 +1,23 @@
+# Ignore Visual Studio files
+.vs/
+*.user
+*.suo
+
+# Build results
+bin/
+obj/
+*.dll
+*.exe
+
+# ASP.NET files
+App_Data/
+App_Start/
+*.log
+
+# Database
+*.mdf
+*.ldf
+
+# Others
+.env
+node_modules/
