@@ -1,4 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using PatientRecoverySystemProject.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// SQL Server ulanish
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 
