@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PatientRecoverySystemProject.Data;
 using PatientRecoverySystemProject.Models;
-using PatientRecoverySystemProject.Services;
+using PatientRecoverySystemProject.Services;  // ← endi DiagnosisService shu namespace ichida
 
 namespace PatientRecoverySystemProject.Controllers
 {
@@ -11,14 +11,20 @@ namespace PatientRecoverySystemProject.Controllers
     public class DiagnoseController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly DiagnoseService _diagnoseService;
+        private readonly DiagnosisService _diagnosisService;
 
-        public DiagnoseController(ApplicationDbContext context)
+        // DI orqali ApplicationDbContext va DiagnosisService inject qilinadi
+        public DiagnoseController(
+            ApplicationDbContext context,
+            DiagnosisService diagnosisService)
         {
             _context = context;
-            _diagnoseService = new DiagnoseService();
+            _diagnosisService = diagnosisService;
         }
 
+        /// <summary>
+        /// POST: /api/diagnose/{patientId}
+        /// </summary>
         [HttpPost("{patientId}")]
         public async Task<ActionResult<Diagnosis>> DiagnosePatient(int patientId)
         {
@@ -26,10 +32,10 @@ namespace PatientRecoverySystemProject.Controllers
                 .Where(s => s.PatientId == patientId)
                 .ToListAsync();
 
-            if (symptoms.Count == 0)
-                return BadRequest("No symptoms found for this patient.");
+            if (!symptoms.Any())
+                return BadRequest($"No symptoms found for patientId = {patientId}.");
 
-            var recommendation = _diagnoseService.GetRecommendation(symptoms);
+            var recommendation = _diagnosisService.GetRecommendation(symptoms);
 
             var diagnosis = new Diagnosis
             {

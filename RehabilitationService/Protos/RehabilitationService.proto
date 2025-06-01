@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package rehab;
+option csharp_namespace = "RehabilitationService";
+
+// “Rehabilitation” servisi: mashqlar va og‘riq darajasini qabul qilib, qaytaradi
+service Rehabilitation {
+  // Yangi reabilitatsiya yozuvini qo‘shadi
+  rpc AddRehabData (RehabRequest) returns (RehabReply);
+
+  // Bemorning barcha yozuvlarini beradi
+  rpc GetRehabData (PatientRequest) returns (RehabListReply);
+}
+
+message RehabRequest {
+  int32 patientId = 1;      // Bemorning ID raqami
+  string exercise = 2;      // Misol: “Walking”, “Stretching”
+  string feedback = 3;      // Bemorning izohi
+  int32 painLevel = 4;      // 0–10 oralig‘ida og‘riq darajasi
+}
+
+message RehabReply {
+  string message = 1;       // Javob xabari, misol: “Added successfully.”
+}
+
+message PatientRequest {
+  int32 patientId = 1;      // Faqat bemorning ID raqami
+}
+
+message RehabRecord {
+  string exercise = 1;
+  string feedback = 2;
+  int32 painLevel = 3;
+  string timestamp = 4;     // “2025-06-01 12:34:56Z” ko‘rinishida
+}
+
+message RehabListReply {
+  repeated RehabRecord records = 1;
+}

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿// Data/ApplicationDbContext.cs
+using Microsoft.EntityFrameworkCore;
 using PatientRecoverySystemProject.Models;
 
 namespace PatientRecoverySystemProject.Data
@@ -12,7 +13,6 @@ namespace PatientRecoverySystemProject.Data
         public DbSet<Symptom> Symptoms { get; set; }
         public DbSet<Diagnosis> Diagnoses { get; set; }
         public DbSet<MonitoringData> MonitoringData { get; set; }
-        public DbSet<RehabilitationData> RehabilitationData { get; set; }
-
+        public DbSet<RehabilitationData> RehabilitationDatas { get; set; }
     }
 }

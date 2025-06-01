@@ -1,41 +1,40 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PatientRecoverySystemProject.Data;
-using PatientRecoverySystemProject.Models;
+using PatientRecoverySystemProject.Services;  // MonitoringGrpcClient va RehabilitationGrpcClient shu papkada joylashadi
+using rehab;                                  // bu namespace .proto fayldan avtomatik yaratiladi
+using System.Threading.Tasks;
 
 namespace PatientRecoverySystemProject.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class RehabilitationController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly RehabilitationGrpcClient _grpcClient;
 
-        public RehabilitationController(ApplicationDbContext context)
+        public RehabilitationController(RehabilitationGrpcClient grpcClient)
         {
-            _context = context;
+            _grpcClient = grpcClient;
         }
 
-        // GET: api/rehabilitation/1
-        [HttpGet("{patientId}")]
-        public async Task<ActionResult<IEnumerable<RehabilitationData>>> GetRehabData(int patientId)
-        {
-            var data = await _context.RehabilitationData
-                .Where(r => r.PatientId == patientId)
-                .OrderByDescending(r => r.Timestamp)
-                .ToListAsync();
-
-            return Ok(data);
-        }
-
-        // POST: api/rehabilitation
+        // POST: /api/rehabilitation
         [HttpPost]
-        public async Task<ActionResult<RehabilitationData>> CreateRehabData(RehabilitationData data)
+        public async Task<IActionResult> PostRehabData([FromBody] RehabRequest data)
         {
-            _context.RehabilitationData.Add(data);
-            await _context.SaveChangesAsync();
+            var result = await _grpcClient.AddRehabDataAsync(
+                data.PatientId,
+                data.Exercise,
+                data.Feedback,
+                data.PainLevel
+            );
+            return Ok(new { message = result });
+        }
 
-            return CreatedAtAction(nameof(GetRehabData), new { patientId = data.PatientId }, data);
+        // GET: /api/rehabilitation/{patientId}
+        [HttpGet("{patientId}")]
+        public async Task<IActionResult> GetRehabData(int patientId)
+        {
+            var records = await _grpcClient.GetRehabDataAsync(patientId);
+            return Ok(records);
         }
     }
 }

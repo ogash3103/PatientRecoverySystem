@@ -1,0 +1,49 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "MonitoringService";
+
+package monitoring;
+
+// Monitoring xizmat nomi
+service Monitoring {
+  // Kirish: MonitoringRequest, Chiqish: MonitoringReply
+  rpc AddMonitoringData (MonitoringRequest) returns (MonitoringReply);
+
+  // Kirish: PatientRequest, Chiqish: MonitoringListReply
+  rpc GetMonitoringData (PatientRequest) returns (MonitoringListReply);
+}
+
+// Monitoring uchun request xabari
+message MonitoringRequest {
+  int32 PatientId = 1;
+  float Temperature = 2;
+  int32 HeartRate = 3;
+  int32 BpSystolic = 4;
+  int32 BpDiastolic = 5;
+  string Notes = 6;
+}
+
+// Monitoring maʼlumot qo‘shilganidan keyingi javob
+message MonitoringReply {
+  string Message = 1;
+}
+
+// Faqat patientId so‘rovi uchun
+message PatientRequest {
+  int32 PatientId = 1;
+}
+
+// Bitta monitoring yozuv uchun
+message MonitoringRecord {
+  float Temperature = 1;
+  int32 HeartRate = 2;
+  int32 BpSystolic = 3;
+  int32 BpDiastolic = 4;
+  string Notes = 5;
+  string Timestamp = 6;
+}
+
+// Xamma monitoring yozuvlarini qaytarish uchun ro‘yxat
+message MonitoringListReply {
+  repeated MonitoringRecord Records = 1;
+}

@@ -1,40 +1,62 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PatientRecoverySystemProject.Data;
-using PatientRecoverySystemProject.Models;
+﻿// Controllers/MonitoringController.cs
+
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+// Quyidagi using’lar muhim, ularni yuqorida qo‘shing:
+using PatientRecoverySystemProject.Models;    // MonitoringDto, MonitoringData uchun
+using PatientRecoverySystemProject.Services;  // MonitoringGrpcClient uchun
 
 namespace PatientRecoverySystemProject.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class MonitoringController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly MonitoringGrpcClient _grpcClient;
 
-        public MonitoringController(ApplicationDbContext context)
+        // DI orqali MonitoringGrpcClient inject qilinadi:
+        public MonitoringController(MonitoringGrpcClient grpcClient)
         {
-            _context = context;
+            _grpcClient = grpcClient;
         }
 
-        // ✅ POST: /api/Monitoring
+        /// <summary>
+        /// POST: /api/monitoring
+        /// </summary>
         [HttpPost]
-        public async Task<ActionResult<MonitoringData>> PostMonitoringData(MonitoringData data)
+        public async Task<IActionResult> PostMonitoringData([FromBody] MonitoringData data)
         {
-            _context.MonitoringData.Add(data);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetMonitoringData), new { patientId = data.PatientId }, data);
+            if (data == null)
+            {
+                return BadRequest("Monitoring data is required.");
+            }
+
+            // gRPC client yordamida serverga yozuv yuboramiz
+            var result = await _grpcClient.AddMonitoringDataAsync(
+                data.PatientId,
+                data.Temperature,
+                data.HeartRate,
+                data.BpSystolic,
+                data.BpDiastolic,
+                data.Notes
+            );
+
+            return Ok(new { message = result });
         }
 
-        // ✅ GET: /api/Monitoring/{patientId}
+        /// <summary>
+        /// GET: /api/monitoring/{patientId}
+        /// </summary>
         [HttpGet("{patientId}")]
-        public async Task<ActionResult<IEnumerable<MonitoringData>>> GetMonitoringData(int patientId)
+        public async Task<IActionResult> GetMonitoringData(int patientId)
         {
-            var monitoring = await _context.MonitoringData
-                .Where(md => md.PatientId == patientId)
-                .AsNoTracking()
-                .ToListAsync();
+            if (patientId <= 0)
+                return BadRequest("Invalid patientId.");
 
-            return Ok(monitoring);
+            var records = await _grpcClient.GetMonitoringDataAsync(patientId);
+            return Ok(records);
         }
     }
 }

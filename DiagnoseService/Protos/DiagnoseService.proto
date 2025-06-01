@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option csharp_namespace = "DiagnoseService";
+
+package diagnose;
+
+// gRPC xizmat nomi
+service Diagnose {
+  // Bitta RPC-metod: GetRecommendation
+  rpc GetRecommendation (DiagnosisRequest) returns (DiagnosisReply);
+}
+
+// Kirish xabari: simptom so‘rovi
+message DiagnosisRequest {
+  string SymptomText = 1;
+}
+
+// Chiqish xabari: tavsiya (icmal)
+message DiagnosisReply {
+  string Recommendation = 1;
+}
