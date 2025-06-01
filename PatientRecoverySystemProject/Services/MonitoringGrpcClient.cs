@@ -20,7 +20,7 @@ namespace PatientRecoverySystemProject.Services
         {
             // Bu yerga MonitoringService gRPC serverning manzilini qo‘ying:
             // Masalan: VS da server ishlayotgani “Now listening on: https://localhost:5003” bo‘lsa:
-            var channel = GrpcChannel.ForAddress("https://localhost:5003");
+            var channel = GrpcChannel.ForAddress("https://localhost:7167");
             _client = new Monitoring.MonitoringClient(channel);
         }
 

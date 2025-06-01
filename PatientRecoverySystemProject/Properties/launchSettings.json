@@ -1,34 +1,29 @@
-﻿{
+﻿// File: PatientRecoverySystemProject/Properties/launchSettings.json
+{
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:4505",
-      "sslPort": 44397
+      // IIS Express uchun lokal HTTP porti va HTTPS sertifikat porti
+      "applicationUrl": "http://localhost:5122",
+      "sslPort": 7151
     }
   },
   "profiles": {
-    "http": {
+    // Bu profil "dotnet run" bilan yuklaganda ishlatiladi
+    "PatientRecoverySystemProject": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:5122",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "https": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "swagger",
+      // Gateway HTTP va HTTPS portlari:
       "applicationUrl": "https://localhost:7151;http://localhost:5122",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
+    // Agar IIS Express bilan yuklash kerak bo‘lsa (Visual Studio ichidan):
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
@@ -36,6 +31,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+      // IIS Express uchun portlar iisSettings boʻlimida avtomatik o‘rnatiladi
     }
   }
 }

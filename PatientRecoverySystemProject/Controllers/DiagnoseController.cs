@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// File: PatientRecoverySystemProject/Controllers/DiagnoseController.cs
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PatientRecoverySystemProject.Data;
 using PatientRecoverySystemProject.Models;
-using PatientRecoverySystemProject.Services;  // ← endi DiagnosisService shu namespace ichida
+using PatientRecoverySystemProject.Services;
 
 namespace PatientRecoverySystemProject.Controllers
 {
@@ -13,18 +14,14 @@ namespace PatientRecoverySystemProject.Controllers
         private readonly ApplicationDbContext _context;
         private readonly DiagnosisService _diagnosisService;
 
-        // DI orqali ApplicationDbContext va DiagnosisService inject qilinadi
         public DiagnoseController(
             ApplicationDbContext context,
             DiagnosisService diagnosisService)
         {
             _context = context;
-            _diagnosisService = diagnosisService;
+            _diagnosisService = diagnosisService ?? throw new ArgumentNullException(nameof(diagnosisService));
         }
 
-        /// <summary>
-        /// POST: /api/diagnose/{patientId}
-        /// </summary>
         [HttpPost("{patientId}")]
         public async Task<ActionResult<Diagnosis>> DiagnosePatient(int patientId)
         {
@@ -40,7 +37,7 @@ namespace PatientRecoverySystemProject.Controllers
             var diagnosis = new Diagnosis
             {
                 PatientId = patientId,
-                Condition = "Auto-generated based on symptoms",
+                Condition = "Auto‐generated based on symptoms",
                 Recommendation = recommendation
             };
 
@@ -48,6 +45,18 @@ namespace PatientRecoverySystemProject.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(diagnosis);
+        }
+
+        [HttpGet]
+        public ActionResult<string> GetByText([FromQuery] string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return BadRequest("text parameter is required.");
+
+            var fakeSymptoms = new List<Symptom> { new Symptom { Description = text } };
+            var recommendation = _diagnosisService.GetRecommendation(fakeSymptoms);
+
+            return Ok(recommendation);
         }
     }
 }
