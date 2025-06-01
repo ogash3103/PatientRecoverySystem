@@ -18,5 +18,7 @@ namespace PatientRecoverySystemProject.Models
         public Patient Patient { get; set; }  // Navigation property, Patient modeliga bog‘lanadi
         public int BpSystolic { get; set; }
         public int BpDiastolic { get;  set; }
+        public int BloodPressureSystolic { get; internal set; }
+        public int BloodPressureDiastolic { get; internal set; }
     }
 }

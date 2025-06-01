@@ -1,9 +1,5 @@
 ﻿using Grpc.Net.Client;
-using MonitoringService;
-using rehab;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using RehabilitationService;  // ← avto‐generate qilingan sinflar shu namespace ichida
 
 namespace PatientRecoverySystemProject.Services
 {
@@ -13,9 +9,7 @@ namespace PatientRecoverySystemProject.Services
 
         public RehabilitationGrpcClient()
         {
-            // E’tibor: manzil va portni o‘zingizki sozlang 
-            // (RehabilitationService loyihangiz run bo‘ladigan portni yozing)
-            var channel = GrpcChannel.ForAddress("https://localhost:7023");
+            var channel = GrpcChannel.ForAddress("https://localhost:5005");
             _client = new Rehabilitation.RehabilitationClient(channel);
         }
 

@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!-- Biz yaratgan .proto fayl -->
+		<!-- Shu yerda to‘g‘ri yo‘l bo‘lishi kerak -->
 		<Protobuf Include="Protos\RehabilitationService.proto" GrpcServices="Server" />
 	</ItemGroup>
 

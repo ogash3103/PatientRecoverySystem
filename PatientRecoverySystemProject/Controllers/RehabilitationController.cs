@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PatientRecoverySystemProject.Services;  // MonitoringGrpcClient va RehabilitationGrpcClient shu papkada joylashadi
-using rehab;                                  // bu namespace .proto fayldan avtomatik yaratiladi
+using PatientRecoverySystemProject.Services;
+using RehabilitationService;    // ✅ Proto’dan generatsiya qilingan sinflar shu namespace ichida
 using System.Threading.Tasks;
 
 namespace PatientRecoverySystemProject.Controllers
@@ -20,6 +20,9 @@ namespace PatientRecoverySystemProject.Controllers
         [HttpPost]
         public async Task<IActionResult> PostRehabData([FromBody] RehabRequest data)
         {
+            if (data == null)
+                return BadRequest("Request body cannot be null.");
+
             var result = await _grpcClient.AddRehabDataAsync(
                 data.PatientId,
                 data.Exercise,

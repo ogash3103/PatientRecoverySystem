@@ -6,18 +6,9 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 
+	<!-- 🔹 NuGet paketlari -->
 	<ItemGroup>
-	  <Compile Remove="RehabilitationService\**" />
-	  <Content Remove="RehabilitationService\**" />
-	  <EmbeddedResource Remove="RehabilitationService\**" />
-	  <None Remove="RehabilitationService\**" />
-	</ItemGroup>
-
-
-
-
-	<!-- ✅ Paketlar -->
-	<ItemGroup>
+		<!-- gRPC va Protobuf -->
 		<PackageReference Include="Grpc.Net.Client" Version="2.71.0" />
 		<PackageReference Include="Google.Protobuf" Version="3.31.1" />
 		<PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
@@ -25,36 +16,39 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
+
+		<!-- Entity Framework Core (faqat kerakli 9.0.5 versiya) -->
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.5" />
+
+		<!-- Swagger (ixtiyoriy, REST endpointlar uchun) -->
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
 	</ItemGroup>
 
+	<!-- 🔹 gRPC-client uchun auto-generate qilingan proto fayllarni chaqirish -->
+	<ItemGroup>
+		<!-- DiagnoseService gRPC uchun client sinflar -->
+		<Protobuf Include="..\DiagnoseService\Protos\DiagnoseService.proto" GrpcServices="Client" />
+
+		<!-- MonitoringService gRPC uchun client sinflar -->
+		<Protobuf Include="..\MonitoringService\Protos\monitoring.proto" GrpcServices="Client" />
+
+		<!-- RehabilitationService gRPC uchun client sinflar -->
+		<Protobuf Include="..\RehabilitationService\Protos\RehabilitationService.proto" GrpcServices="Client" />
+	</ItemGroup>
+
+	<!-- 🔹 Boshqa mikroxizmat loyihalariga referensiya qo‘shish -->
 	<ItemGroup>
 		<ProjectReference Include="..\DiagnoseService\DiagnoseService.csproj" />
 		<ProjectReference Include="..\MonitoringService\MonitoringService.csproj" />
+		<ProjectReference Include="..\RehabilitationService\RehabilitationService.csproj" />
 	</ItemGroup>
 
-
-	<ItemGroup>
-		<Protobuf Include="..\DiagnoseService\Protos\DiagnoseService.proto" GrpcServices="Client" />
-		<Protobuf Include="..\MonitoringService\Protos\monitoring.proto" GrpcServices="Client" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<!-- EF Core paketlari -->
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0" />
-		<!-- Swagger uchun (ixtiyoriy) -->
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-	</ItemGroup>
-
-	<!-- Papkalarni aniqlash (ixtiyoriy) -->
+	<!-- 🔹 Migrations papkasi (EF Core uchun, ixtiyoriy) -->
 	<ItemGroup>
 		<Folder Include="Migrations\" />
 	</ItemGroup>
